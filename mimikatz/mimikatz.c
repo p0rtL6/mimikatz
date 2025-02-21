@@ -189,6 +189,8 @@ NTSTATUS mimikatz_doLocal(wchar_t * input)
 		}
 		else command = argv[0];
 
+		BOOL isHelpCommand = (command != NULL) && ((_wcsicmp(command, L"help") == 0) || (_wcsicmp(command, L"h") == 0));
+
 		for(indexModule = 0; !moduleFound && (indexModule < ARRAYSIZE(mimikatz_modules)); indexModule++)
 			if(moduleFound = (!module || (_wcsicmp(module, mimikatz_modules[indexModule]->shortName) == 0)))
 				if(command)
@@ -196,23 +198,39 @@ NTSTATUS mimikatz_doLocal(wchar_t * input)
 						if(commandFound = _wcsicmp(command, mimikatz_modules[indexModule]->commands[indexCommand].command) == 0)
 							status = mimikatz_modules[indexModule]->commands[indexCommand].pCommand(argc - 1, argv + 1);
 
-		if(!moduleFound)
+		indexModule -= 1;
+
+		if((isHelpCommand && (_wcsicmp(mimikatz_modules[indexModule]->shortName, L"standard") == 0)) || !moduleFound)
 		{
-			PRINT_ERROR(L"\"%s\" module not found !\n", module);
-			for(indexModule = 0; indexModule < ARRAYSIZE(mimikatz_modules); indexModule++)
+			if (!isHelpCommand)
 			{
-				kprintf(L"\n%16s", mimikatz_modules[indexModule]->shortName);
-				if(mimikatz_modules[indexModule]->fullName)
-					kprintf(L"  -  %s", mimikatz_modules[indexModule]->fullName);
-				if(mimikatz_modules[indexModule]->description)
-					kprintf(L"  [%s]", mimikatz_modules[indexModule]->description);
+				PRINT_ERROR(L"\"%s\" module not found !\n", module);
+			}
+			else
+			{
+				kprintf(L"\nModules :\n");
+			}
+
+			for(unsigned short index = 0; index < ARRAYSIZE(mimikatz_modules); index++)
+			{
+				kprintf(L"\n%16s", mimikatz_modules[index]->shortName);
+				if(mimikatz_modules[index]->fullName)
+					kprintf(L"  -  %s", mimikatz_modules[index]->fullName);
+				if(mimikatz_modules[index]->description)
+					kprintf(L"  [%s]", mimikatz_modules[index]->description);
 			}
 			kprintf(L"\n");
 		}
-		else if(!commandFound)
+		if(isHelpCommand || (moduleFound && !commandFound))
 		{
-			indexModule -= 1;
-			PRINT_ERROR(L"\"%s\" command of \"%s\" module not found !\n", command, mimikatz_modules[indexModule]->shortName);
+			if (!isHelpCommand)
+			{
+				PRINT_ERROR(L"\"%s\" command of \"%s\" module not found !\n", command, mimikatz_modules[indexModule]->shortName);
+			}
+			else
+			{
+				kprintf(L"\nModule Help Menu :\n");
+			}
 
 			kprintf(L"\nModule :\t%s", mimikatz_modules[indexModule]->shortName);
 			if(mimikatz_modules[indexModule]->fullName)
