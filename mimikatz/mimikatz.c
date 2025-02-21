@@ -204,6 +204,8 @@ NTSTATUS mimikatz_doLocal(wchar_t * input)
 		if (isHelpCommand && isStandardModule)
 		{
 			kprintf(L"Usage ; module::command\n");
+			kprintf(L"Usage ; !command\n");
+			kprintf(L"Usage ; *rpcdata\n");
 		}
 
 		if((isHelpCommand && isStandardModule) || !moduleFound)

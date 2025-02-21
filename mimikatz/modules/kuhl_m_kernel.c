@@ -48,7 +48,18 @@ NTSTATUS kuhl_m_kernel_do(wchar_t * input)
 			}
 		}
 		if(!commandFound)
-			kull_m_kernel_mimidrv_simple_output(IOCTL_MIMIDRV_RAW, input, (DWORD) (wcslen(input) + 1) * sizeof(wchar_t));
+			if (((_wcsicmp(argv[0], L"help") == 0) || (_wcsicmp(argv[0], L"h") == 0)))
+			{
+				for(unsigned short index = 0; index < (sizeof(kuhl_k_c_kernel) / sizeof(kuhl_k_c_kernel[0])); index++)
+				{
+					kprintf(L"\n%20s", kuhl_k_c_kernel[index].command);
+					if(kuhl_k_c_kernel[index].description)
+						kprintf(L"  -  %s", kuhl_k_c_kernel[index].description);
+				}
+				kprintf(L"\n");
+			}
+			else
+				kull_m_kernel_mimidrv_simple_output(IOCTL_MIMIDRV_RAW, input, (DWORD) (wcslen(input) + 1) * sizeof(wchar_t));
 	}
 	return status;
 }
