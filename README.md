@@ -93,7 +93,7 @@ lsadump::dcsync /user:domain\krbtgt /domain:lab.local
 
 ## Build
 `mimikatz` is in the form of a Visual Studio Solution and a WinDDK driver (optional for main operations), so prerequisites are:
-* for `mimikatz` and `mimilib` : Visual Studio 2010, 2012 or 2013 for Desktop (**2013 Express for Desktop is free and supports x86 & x64** - http://www.microsoft.com/download/details.aspx?id=44914)
+* for `mimikatz` and `mimilib` : Visual Studio 2022 Community (select "Desktop Development with C++" and "C++ Windows XP Support for VS 2017 (v141) tools [Deprecated]" during installation) - https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=Community&channel=Release&version=VS2022&source=VSLandingPage&cid=2030&passive=false
 * _for `mimikatz driver`, `mimilove` (and `ddk2003` platform) : Windows Driver Kit **7.1** (WinDDK) - http://www.microsoft.com/download/details.aspx?id=11800_
 
 `mimikatz` uses `SVN` for source control, but is now available with `GIT` too!
