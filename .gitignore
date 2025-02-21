@@ -1,0 +1,9 @@
+.vs
+.vscode
+Win32
+x64
+ARM64
+mimikatz/Win32
+mimikatz/x64
+mimikatz/ARM64
+mimikatz/mimikatz.vcxproj.user
