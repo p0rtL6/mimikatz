@@ -43,6 +43,13 @@ If you don't want to build it, binaries are availables on https://github.com/gen
 
 ## Quick usage
 ```
+command (help for help)
+module::command (module::help for help)
+!command (!help for help)
+*rpcdata
+```
+
+```
 log
 privilege::debug
 ```
