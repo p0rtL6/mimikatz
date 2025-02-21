@@ -189,8 +189,6 @@ NTSTATUS mimikatz_doLocal(wchar_t * input)
 		}
 		else command = argv[0];
 
-		BOOL isHelpCommand = (command != NULL) && ((_wcsicmp(command, L"help") == 0) || (_wcsicmp(command, L"h") == 0));
-
 		for(indexModule = 0; !moduleFound && (indexModule < ARRAYSIZE(mimikatz_modules)); indexModule++)
 			if(moduleFound = (!module || (_wcsicmp(module, mimikatz_modules[indexModule]->shortName) == 0)))
 				if(command)
@@ -200,11 +198,19 @@ NTSTATUS mimikatz_doLocal(wchar_t * input)
 
 		indexModule -= 1;
 
-		if((isHelpCommand && (_wcsicmp(mimikatz_modules[indexModule]->shortName, L"standard") == 0)) || !moduleFound)
+		BOOL isHelpCommand = (command != NULL) && ((_wcsicmp(command, L"help") == 0) || (_wcsicmp(command, L"h") == 0));
+		BOOL isStandardModule = _wcsicmp(mimikatz_modules[indexModule]->shortName, L"standard") == 0;
+
+		if (isHelpCommand && isStandardModule)
+		{
+			kprintf(L"Usage ; module::command\n");
+		}
+
+		if((isHelpCommand && isStandardModule) || !moduleFound)
 		{
 			if (!isHelpCommand)
 			{
-				PRINT_ERROR(L"\"%s\" module not found !\n", module);
+				PRINT_ERROR(L"\"%s\" module not found ! (type \"help\" for help)\n", module);
 			}
 			else
 			{
@@ -225,11 +231,11 @@ NTSTATUS mimikatz_doLocal(wchar_t * input)
 		{
 			if (!isHelpCommand)
 			{
-				PRINT_ERROR(L"\"%s\" command of \"%s\" module not found !\n", command, mimikatz_modules[indexModule]->shortName);
+				PRINT_ERROR(L"\"%s\" command of \"%s\" module not found ! (type \"help\" for help)\n", command, mimikatz_modules[indexModule]->shortName);
 			}
-			else
+			else if(isStandardModule)
 			{
-				kprintf(L"\nModule Help Menu :\n");
+				kprintf(L"\nStandard Module Help Menu :\n");
 			}
 
 			kprintf(L"\nModule :\t%s", mimikatz_modules[indexModule]->shortName);
