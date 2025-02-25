@@ -263,8 +263,7 @@ BOOL kull_m_string_args_byName(const int argc, const wchar_t * argv[], const wch
 		if((wcslen(argv[i]) > 1) && ((argv[i][0] == L'/') || (argv[i][0] == L'-')))
 		{
 			pArgName = argv[i] + 1;
-			if(!(pSeparator = wcschr(argv[i], L':')))
-				pSeparator = wcschr(argv[i], L'=');
+			pSeparator = wcschr(argv[i], L':');
 
 			argLen =  (pSeparator) ? (pSeparator - pArgName) : wcslen(pArgName);
 			if((argLen == nameLen) && _wcsnicmp(name, pArgName, argLen) == 0)
